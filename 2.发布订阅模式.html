@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="这是关键字">
+    <meta name="description" content="这是内容描述">
+    <title>这是标题</title>
+    <link rel="icon" href="">
+</head>
+<body>
+
+<!--<script src='../../jquery-1.11.3.js'></script>-->
+<script>
+    //发布订阅 : 很类似 元素.addEventListener()
+    // 核心思想 : 准备一个容器, 把到达时间要处理的事件,把事件一一放到容器, 到达时间,方法一一执行
+    /*var $callback = $.Callbacks();
+    var fn = function () {
+        console.log(1);
+    };
+    //remove 对应 add 方法
+    $callback.add(fn);
+    $callback.fire();*/
+
+
+    function fn() {
+        console.log(0);
+    }
+
+    function fn1() {
+        console.log(1);
+    }
+
+    // 封装发布订阅
+    function Subscribe() {
+        // 这个类有 add remove fire的方法
+        this.container = [];
+
+    }
+
+    Subscribe.prototype.add = function (add) {
+        if (typeof add !== 'function') return;
+        //this 指向当前实例
+        for (let i = 0; i < this.container.length; i++) {
+            var cur = this.container[i];
+            if (cur === add) {
+                return;
+            }
+            this.container.push(add);
+        }
+
+    }
+    Subscribe.prototype.remove = function (remove) {
+        for (let i = 0; i < this.container.length; i++) {
+            var cur = this.container[i];
+            if (cur === remove) {
+                this.container.splice(i, 1);
+            }
+        }
+    }
+    Subscribe.prototype.fire = function () {
+        //将之前订阅的方法依次执行,并且有参数传递
+        for (let i = 0; i < this.container.length; i++) {
+            var cur = this.container[i];
+            cur.apply(this,arguments);
+        }
+    }
+
+    var sub = new Subscribe();
+    sub.add(fn);
+    //sub.remove(fn1);
+    sub.fire(1, 2);
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="这是关键字">
+    <meta name="description" content="这是内容描述">
+    <title>这是标题</title>
+    <link rel="icon" href="">
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 490px;
+            height: 490px;
+            background: #000000;
+            opacity: .8;
+            margin: 50px auto;
+        }
+
+        #list {
+            list-style: none;
+            width: 490px;
+            height: 490px;
+        }
+
+        #list li {
+            user-select: none;
+            cursor: move;
+            width: 150px;
+            height: 150px;
+            background: khaki;
+            float: left;
+            position: relative;
+            left: 0;
+            top: 0;
+            margin: 10px 0 0 10px;
+            font-size: 35px;
+            font-weight: bold;
+            text-align: center;
+            line-height: 150px;
+            color: #2a2a2a;
+        }
+    </style>
+</head>
+<body>
+<div class="container" id="container">
+    <ul id="list">
+        <li>1</li>
+        <li>2</li>
+        <li>3</li>
+        <li>4</li>
+        <li>5</li>
+        <li>6</li>
+        <li>7</li>
+        <li>8</li>
+        <li>9</li>
+    </ul>
+</div>
+
+<script src="Drag-发布订阅.js"></script>
+<script>
+    alert(0&&2);
+    let list = document.getElementById('list'),
+        oLis = list.getElementsByTagName('li');
+    for (let i = 0; i < oLis.length; i++) {
+        let drag = new Drag(oLis[i]);
+
+        drag.add('move', function () {
+
+            for (let j = 0; j < oLis.length; j++) {
+                if (oLis[i] === oLis[j]){continue}
+                if (Math.abs(oLis[i].offsetLeft - oLis[j].offsetLeft) < 150) {
+                    if (Math.abs(oLis[i].offsetTop - oLis[j].offsetTop) < 150) {
+                        oLis[j].style.backgroundColor = 'pink';
+                        oLis[j].classList.add('select');
+                    } else{
+                        oLis[j].style.backgroundColor = 'khaki';
+                    }
+                } else{
+                    oLis[j].style.backgroundColor = 'khaki';
+                    oLis[j].classList.remove('select');
+                }
+            }
+            //判断是否换位置
+            var select = document.getElementsByClassName('select');
+            for (let k = 0; k < select.length; k++) {
+                if (oLis[i].offsetLeft - oLis[i].clientWidth/2 <= select[k].offsetLeft && oLis[i].offsetTop - oLis[i].clientHeight/2 <= select[k].offsetTop){
+                    if (oLis[i].offsetLeft + oLis[i].clientWidth/2 >= select[k].offsetLeft && oLis[i].offsetTop + oLis[i].clientHeight/2 >= select[k].offsetTop){
+                        drag.add('up',function () {
+                           // oLis[i].innerHTML = select[k]
+
+                            // oLis[i].cloneNode(true);
+                            var _select = select[k].cloneNode(true);
+                            list.replaceChild(oLis[i].cloneNode(true), select[k]);
+                            list.replaceChild(_select, oLis[i]);
+                        })
+                    }
+                }
+
+            }
+        });
+
+
+        drag.add('up', function () {
+
+
+            //鼠标移除恢复原来的颜色
+            for (let j = 0; j < oLis.length; j++) {
+                oLis[j].style.backgroundColor = 'khaki';
+            }
+
+            //恢复原来的位置
+            oLis[i].style.left = 0;
+            oLis[i].style.top = 0;
+        })
+    }
+
+
+</script>
+</body>
+</html>

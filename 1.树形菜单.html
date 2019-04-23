@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="这是关键字">
+    <meta name="description" content="这是内容描述">
+    <title>这是标题</title>
+    <link rel="icon" href="">
+    <style type="text/css">
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        #box{
+            width: 300px;
+            height: 300px;
+            background: #00cc99;
+            position: relative;
+        }
+        #center{
+            width: 300px;
+            height: 80px;
+            background: #ff6700;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+    </style>
+</head>
+<body>
+<div id = 'box'>
+    <div id="center"></div>
+</div>
+
+
+<script>
+    var box = document.getElementById('box'),
+        center = document.getElementById('center');
+    center.onmousedown = function (e) {
+        e = e|| window.event;
+        this.curL = e.clientX - this.offsetLeft;
+        this.curT = e.clientY - this.offsetTop;
+        var that = this;
+        center.onmousemove = function (e) {
+            move.call(that,e)
+        };
+
+    };
+    function move(e) {
+        console.log(1);
+        e = e|| window.event;
+        var boxL = e.clientX - this.curL;
+        var boxT = e.clientY - this.curT;
+        console.log(boxL, boxT);
+        box.style.left = boxL + 'px';
+        box.style.top = boxT + 'px';
+    }
+    center.onmouseup = function () {
+        document.body.onmousemove = null;
+        document.body.onmouseup = null;
+    }
+
+</script>
+</body>
+</html>

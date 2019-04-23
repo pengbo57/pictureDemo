@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="这是关键字">
+    <meta name="description" content="这是内容描述">
+    <title>这是标题</title>
+    <link rel="icon" href="">
+    <link rel="stylesheet" href="picture.css">
+</head>
+<body>
+<div class="container" id="container">
+    <ul id="list">
+        <li>1</li>
+        <li>2</li>
+        <li>3</li>
+        <li>4</li>
+        <li>5</li>
+        <li>6</li>
+        <li>7</li>
+        <li>8</li>
+        <li>9</li>
+    </ul>
+</div>
+
+<script src="Drag-发布订阅.js"></script>
+<script>
+    let list = document.getElementById('list'),
+        oLis = list.getElementsByTagName('li');
+
+    for (let i = 0; i < oLis.length; i++) {
+        let drag = new Drag(oLis[i]);
+        let l = oLis[i].offsetLeft,
+            t = oLis[i].offsetTop;
+        drag.add('move', function () {
+
+            for (let j = 0; j < oLis.length; j++) {
+                let left =oLis[j].offsetLeft ,
+                    top = oLis[j].offsetTop;
+                if (Math.abs(left - l) < 160 && Math.abs(top - t) <160) {
+                    oLis[j].style.backgroundColor = 'pink';
+                }
+            }
+        });
+
+
+        drag.add('up', function () {
+            oLis[i].style.left = getComputedStyle(oLis[i]).left;
+            oLis[i].style.top = getComputedStyle(oLis[i]).top;
+            oLis[i].style.backgroundColor = 'greenyellow';
+        })
+    }
+
+
+</script>
+</body>
+</html>
